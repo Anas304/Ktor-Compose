@@ -51,6 +51,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             //image loader
             api(libs.image.loader)
+            //lottie animation handler
+            api(libs.compottie)
 
             implementation(libs.bundles.ktor)
         }

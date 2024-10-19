@@ -10,13 +10,13 @@ import kotlinx.serialization.SerializationException
 import utils.NetworkError
 import utils.Result
 
-class InsultsCensorClient(private val httpClient: HttpClient) {
+class CatAPIClient(private val httpClient: HttpClient) {
     suspend fun getCatImages(numberOfCatsImage:Int): Result<List<CatDTO>, NetworkError> {
         val response = try {
             httpClient.get(
                 urlString = "https://api.thecatapi.com/v1/images/search"
             ){
-                parameter("limit",10)
+                parameter("limit",numberOfCatsImage)
                 contentType()
             }
         } catch (e: UnresolvedAddressException) {
