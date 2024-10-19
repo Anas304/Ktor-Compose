@@ -10,15 +10,13 @@ import kotlinx.serialization.SerializationException
 import utils.NetworkError
 import utils.Result
 
-class InsultsCensorClient(
-    private val httpClient: HttpClient
-) {
-    suspend fun censorWords(uncensored: String): Result<String, NetworkError> {
+class InsultsCensorClient(private val httpClient: HttpClient) {
+    suspend fun getCatImages(numberOfCatsImage:Int): Result<List<CatDTO>, NetworkError> {
         val response = try {
             httpClient.get(
-                urlString = "https://www.purgomalum.com/service/json"
-            ) {
-                parameter("text", uncensored)
+                urlString = "https://api.thecatapi.com/v1/images/search"
+            ){
+                parameter("limit",10)
                 contentType()
             }
         } catch (e: UnresolvedAddressException) {
@@ -30,8 +28,8 @@ class InsultsCensorClient(
         // { "Result":"You ***" }
         return when (response.status.value) {
             in 200..299 -> {
-                val censoredText = response.body<CensoredTextDTO>()
-                Result.Success(censoredText.result)
+                val catImages  = response.body<List<CatDTO>>()
+                Result.Success(catImages)
             }
             //For authenticated API response
             401 -> Result.Error(NetworkError.UNAUTHORIZED)
